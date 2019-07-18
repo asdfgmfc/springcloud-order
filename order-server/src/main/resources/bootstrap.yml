@@ -1,0 +1,80 @@
+spring:
+  redis:
+    host: 192.168.1.17
+    port: 6379
+  rabbitmq:
+    host: 192.168.1.17
+
+  application:
+    name: order
+  #  datasource:
+  #    driver-class-name: com.mysql.jdbc.Driver
+  #    username: root
+  #    password: root
+  #    url: jdbc:mysql://127.0.0.1/springcloud_sell?characterEncoding=utf-8&useSSL=false
+  #  jpa.show-sql: true
+
+  cloud:
+    config:
+      discovery:
+        enabled: true
+        service-id: CONFIG
+      profile: test
+    bus:
+      id: ${spring.application.name}:${spring.cloud.config.profile}:${random.value}
+    stream:
+      bindings:
+        myMessageInput:
+##          destination: studyExchange
+          group: order
+          content-type: application/json
+#        myMessageInput2:
+#          group: order2
+#          content-type: application/json
+#      binders:
+#        defaultRabbit:
+#          type: rabbit
+#          environment:
+#            spring:
+#              rabbitmq:
+#                addresses: 192.168.1.16
+#                username: guest
+#                password: guest
+#                virtual-host: /
+
+
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka/
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+    getProductInfoList:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+
+#feign:
+#  hystrix:
+#    enabled: true
+
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+
+ribbon:
+  ConnectTimeout: 2000
+  ReadTimeout: 5000
+
+logging:
+  level:
+    org.springframework.cloud.openfeign: debug
